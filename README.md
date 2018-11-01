@@ -1,6 +1,6 @@
 # swift_po aka `spo`
 
-Substitute `po` command for Swift.
+Substitute `po` command for Swift, with fewer corner cases to watch out for.
 
 ### Avoids Leaks
 
