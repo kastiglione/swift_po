@@ -56,8 +56,8 @@ A summary of what `swift_po` does for you.
 | `spo` command | equivalent lldb |
 | - | - |
 | `spo 0x76543210` | `expression -l objc -O -- 0x76543210` |
-| `spo self` | `frame variable -O -- self` |
-| `spo self.objects` | `frame variable -O -- self.objects` |
+| `spo self` | `frame variable -O self` |
+| `spo self.objects` | `frame variable -O self.objects` |
 | `spo self.view` | `expression print(self.view)` |
 | `spo some.function()` | `expression print(some.function())` |
 
