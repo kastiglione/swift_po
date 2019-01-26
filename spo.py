@@ -1,3 +1,4 @@
+from __future__ import print_function
 import lldb
 import re
 
@@ -18,14 +19,14 @@ def _swift_po(debugger, expression, ctx, result, _):
 
     # If not Swift, do a vanilla `po`
     if frame.GuessLanguage() != lldb.eLanguageTypeSwift:
-        print >> result, frame.EvaluateExpression(expression).description
+        print(frame.EvaluateExpression(expression).description, file=result)
         return
 
     # First try hex addresses as object pointers
     if re.match("0x[0-9a-fA-F]+$", expression):
         value = frame.EvaluateExpression(expression, _objc_options())
         description = value.description
-        print >> result, (description or expression)
+        print(description or expression, file=result)
         return
 
     # Next try `frame variable` (GetValueForVariablePath)
@@ -34,7 +35,7 @@ def _swift_po(debugger, expression, ctx, result, _):
         if value.IsValid():
             description = value.description.rstrip()
             if description and not description.startswith(DescriptionErrors):
-                print >> result, description
+                print(description, file=result)
                 return
 
     # Finally, use Swift's print() to avoid leaked objects, missing deinits.
