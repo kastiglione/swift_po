@@ -25,20 +25,18 @@ def _swift_po(debugger, expression, ctx, result, _):
     # First try hex addresses as object pointers
     if re.match("0x[0-9a-fA-F]+$", expression):
         value = frame.EvaluateExpression(expression, _objc_options())
-        description = value.description
-        print(description or expression, file=result)
+        print(value.description or expression, file=result)
         return
 
-    # Next try `frame variable` (GetValueForVariablePath)
-    if re.match(r"[\w[\w\d]*(\.[\w\d]+)*$", expression):
-        value = frame.GetValueForVariablePath(expression)
-        if value.IsValid():
-            description = value.description.rstrip()
-            if description and not description.startswith(DescriptionErrors):
-                print(description, file=result)
-                return
+    # Next try `frame variable` using GetValueForVariablePath()
+    value = frame.GetValueForVariablePath(expression)
+    if value.error.success:
+        description = value.description.rstrip()
+        if description and not description.startswith(DescriptionErrors):
+            print(description, file=result)
+            return
 
-    # Finally, use Swift's print() to avoid leaked objects, missing deinits.
+    # Finally, use Swift's print() to avoid leaked objects.
     frame.EvaluateExpression("print({})".format(expression))
 
 
