@@ -3,7 +3,7 @@
 Substitute `po` command for Swift, with fewer corner cases to watch out for.
 
 * :white_check_mark: Avoids [memory leaks](#avoids-leaks) caused by lldb
-* :white_check_mark: Automatically uses `vo` (`frame variable`) if possible
+* :white_check_mark: Automatically [uses `vo`](#vo-aka-frame-variable) (`frame variable`) if possible
 * :white_check_mark: Supports [object addresses](#object-pointers), even in Swift
 
 ### Avoids Leaks
