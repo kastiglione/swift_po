@@ -2,6 +2,10 @@
 
 Substitute `po` command for Swift, with fewer corner cases to watch out for.
 
+* :white_check_mark: Avoids [memory leaks](#avoids-leaks) caused by lldb
+* :white_check_mark: Automatically uses `vo` (`frame variable`) if possible
+* :white_check_mark: Supports [object addresses](#object-pointers), even in Swift
+
 ### Avoids Leaks
 
 There's a bug in lldb that creates strong references to any object printed with `po`. The result is leaked objects, and missing calls to `deinit`.
@@ -14,10 +18,14 @@ After running this, `self` will never be released. This is not specific to `self
 
 There are two work arounds:
 
-1. `frame variable -O -- self`
+1. `frame variable -O self`
 2. `call print(self)`
 
 These are what `swift_po` does for you. If the input can be resolved as a variable, then `frame variable ...` is used, otherwise it performs `call print(...)`.
+
+### `vo` aka `frame variable`
+
+LLDB has added a `vo` alias, which is like `po` but is for variable expressions only, not arbitrary code evaluation. Printing via `vo` is faster than `po`. When using `swift_po`, `vo` is used if possible.
 
 ### Object Pointers
 
