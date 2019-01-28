@@ -2,9 +2,9 @@
 
 Substitute `po` command for Swift, with fewer corner cases to watch out for.
 
-* :white_check_mark: Avoids [memory leaks](#avoids-leaks) caused by lldb
-* :white_check_mark: Automatically [uses `vo`](#vo-aka-frame-variable) (`frame variable`) if possible
-* :white_check_mark: Supports [object addresses](#object-pointers), even in Swift
+* ✓ Avoids [memory leaks](#avoids-leaks) caused by lldb
+* ✓ Automatically [uses `frame variable`](#frame-variable) (`vo`) if possible
+* ✓ Supports [object addresses](#object-pointers), even in Swift
 
 ### Avoids Leaks
 
@@ -14,18 +14,18 @@ There's a bug in lldb that creates strong references to any object printed with 
 (lldb) po self
 ```
 
-After running this, `self` will never be released. This is not specific to `self`, it happens to any object. This is also true when using `expression`.
+After running this, `self` will never be released. This is not specific to `self`, it happens to any object. A leak will also happen when using `p` or `expression`.
 
 There are two work arounds:
 
-1. `frame variable -O self`
-2. `call print(self)`
+1. [`frame variable -O`](#frame-variable)
+2. `call print(...)`
 
-These are what `swift_po` does for you. If the input can be resolved as a variable, then `frame variable ...` is used, otherwise it performs `call print(...)`.
+These are what `swift_po` does for you. If the input can be resolved as a variable, then `frame variable` is used, otherwise it performs `call print(...)`.
 
-### `vo` aka `frame variable`
+### frame variable
 
-LLDB has added a `vo` alias, which is like `po` but is for variable expressions only, not arbitrary code evaluation. Printing via `vo` is faster than `po`. When using `swift_po`, `vo` is used if possible.
+LLDB has added a `vo` command, an alias for `frame variable -O`. This much like `po`, but is for variable expressions only, not arbitrary code evaluation. Printing via `vo` is faster than `po`. When using `swift_po`, the first option is perform a `vo` operaton. If that fails, `call print(...)` is performed instead.
 
 ### Object Pointers
 
