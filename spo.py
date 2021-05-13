@@ -37,7 +37,9 @@ def _swift_po(debugger, expression, ctx, result, _):
             return
 
     # Finally, use Swift's print() to avoid leaked objects.
-    frame.EvaluateExpression("print({})".format(expression))
+    err = frame.EvaluateExpression("print({})".format(expression))
+    if err.error.fail:
+        print(err.error.description, file=result)
 
 
 def _objc_options():
